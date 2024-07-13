@@ -77,12 +77,19 @@ def main():
         csrf_token = get_csrf_token(cookie)
         clothing_items = get_group_clothing(group_id, limit, cookie)
         print(colored(f"Fetching {len(clothing_items)} clothing items from group {group_id}...", "cyan"))
+        
         for item in clothing_items:
             asset_id = item["id"]
-            update_clothing_price(asset_id, new_price, csrf_token, cookie)
+            try:
+                update_clothing_price(asset_id, new_price, csrf_token, cookie)
+            except Exception as e:
+                print(colored(f"Failed to update price for item {asset_id}: {e}", "red"))
+        
         print(colored(f"Successfully updated prices for all items in group {group_id}!", "green"))
     except Exception as e:
         print(colored(f"Error: {e}", "red"))
+
+
 
 if __name__ == "__main__":
     print(colored("Starting Roblox Group Clothing Price Updater...", "blue"))
